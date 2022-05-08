@@ -318,6 +318,100 @@ function Table({ name, category, cost, prods, setProds }) {
 
   console.log(dateOne);
 
+  /////////////////////////////
+  /////////////////////////////
+  console.log("dr", draw(dateOne.getFullYear(), optionM - 1));
+
+  function draw(year, month) {
+    let arr = range(getLastDay(year, month));
+    let firstWeekDay = getFirstWeekDay(year, month);
+    let lastWeekDay = getLastWeekDay(year, month);
+    let nums = chunk(normalize(arr, firstWeekDay, 6 - lastWeekDay), 7);
+
+    return nums;
+  } //draw
+
+  function range(count) {
+    let arr = [];
+    for (let i = 0; i < count; i++) {
+      arr[i] = i + 1;
+    } //for
+
+    return arr;
+  }
+
+  function getLastDay(year, month) {
+    let date = new Date(year, month + 1, 0);
+
+    return date.getDate();
+  }
+  /////////////////////
+  function getFirstWeekDay(year, month) {
+    let date = new Date(year, month, 1);
+
+    let dayWeek = date.getDay();
+
+    if (dayWeek > 0) {
+      dayWeek--;
+    } //if
+    else if (dayWeek == 0) {
+      dayWeek = 6;
+    }
+
+    return dayWeek;
+  }
+
+  function getLastWeekDay(year, month) {
+    let date = new Date(year, month + 1, 0);
+
+    let dayWeek = date.getDay();
+
+    if (dayWeek > 0) {
+      dayWeek--;
+    } //if
+    else if (dayWeek == 0) {
+      dayWeek = 6;
+    }
+
+    return dayWeek;
+  }
+
+  function normalize(arr, left, right) {
+    for (let i = 0; i < left; i++) {
+      arr.unshift(" ");
+    } //for
+
+    for (let i = 0; i < right; i++) {
+      arr.push(" ");
+    } //for
+
+    return arr;
+  }
+
+  //////////////////////
+  function chunk(arr, n) {
+    let arrBig = [];
+
+    let k = 0;
+
+    while (k < arr.length) {
+      let arrSmall = [];
+      arrSmall.length = n;
+
+      for (let j = 0; j < arrSmall.length; j++) {
+        arrSmall[j] = arr[k];
+        k++;
+      } //for
+
+      arrBig.push(arrSmall);
+    } //while
+
+    return arrBig;
+  }
+
+  /////////////////////////////
+  /////////////////////////////
+
   function getValue(prop, index) {
     //console.log(prop, index);
     return prods.reduce(
