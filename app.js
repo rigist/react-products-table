@@ -80,21 +80,21 @@ export default function App() {
   let arrProd = [
     {
       id: nanoid(),
-      date: "2022-4-7",
+      date: "2022-5-7",
       name: "ручка",
       category: "канц",
       cost: 10
     },
     {
       id: nanoid(),
-      date: "2022-4-8",
+      date: "2022-5-8",
       name: "отверт",
       category: "инстр",
       cost: 10
     },
     {
       id: nanoid(),
-      date: "2022-4-9",
+      date: "2022-5-9",
       name: "кепка",
       category: "одежда",
       cost: 10
@@ -434,12 +434,12 @@ function Table({ name, category, cost, prods, setProds }) {
   /////////////////////////////
   /////////////////////////////
 
-  function getValue(prop, index) {
+  function getValue(prop, index, arr = prods) {
     //console.log(prop, index);
-    return prods.reduce(
+    return arr.reduce(
       (res, item, index) =>
         item.id === editId ? item[index] /* item[prop] */ : res,
-      prods[index][prop]
+      arr[index][prop]
     );
   }
 
@@ -450,6 +450,9 @@ function Table({ name, category, cost, prods, setProds }) {
       )
     );
   }
+
+  let resultTwo = "*";
+
   //по дате
   const resultDate = prods.map((item) => {
     let itemDate = new Date(item.date);
@@ -466,18 +469,34 @@ function Table({ name, category, cost, prods, setProds }) {
     return JSON.stringify(itemDate) == JSON.stringify(dateOne) ? item : "";
   });
   //период
-  const resultPeriod = prods.map((item) => {
+  const resultPeriod = prods.filter((item) => {
     let itemDate = new Date(item.date);
     let first = new Date(dateFirst);
     let second = new Date(dateSecond);
 
-    return JSON.stringify(itemDate) >= JSON.stringify(first) &&
+    console.log(
+      "ifs",
+      itemDate,
+      first,
+      second,
+      JSON.stringify(itemDate) >= JSON.stringify(first) &&
+        JSON.stringify(itemDate) <= JSON.stringify(second),
+      JSON.stringify(itemDate),
+      JSON.stringify(first),
+      JSON.stringify(second)
+    ); //false  "2022-05-07T19:00:00.000Z"
+
+    return (
+      JSON.stringify(itemDate) >= JSON.stringify(first) &&
       JSON.stringify(itemDate) <= JSON.stringify(second)
-      ? item
-      : "";
+      /* ? item
+      : false */
+    );
   });
 
   console.log("resultP", resultPeriod);
+
+  resultTwo = tableMap(resultPeriod);
 
   //по категориям
   const resultCategory = prods.map((item) => {
@@ -559,6 +578,64 @@ let [month, setMonth] = useState(dateOne.getMonth());
   });
 
   //---
+  function tableMap(arr) {
+    console.log("arr", arr);
+
+    return arr.map((item, index, arr) => {
+      return (
+        <tr
+          key={item.id}
+          onClick={() => {
+            console.log(index);
+            setEditId(item.id);
+            setNumIndex(index);
+            setChange(true);
+          }}
+          onBlur={() => {
+            setEditId(null);
+            setNumIndex(null);
+          }}
+        >
+          <td>
+            <input
+              value={getValue("date", index, arr)}
+              onChange={(event) => changeItem("date", event)}
+            />
+          </td>
+          <td>
+            <input
+              value={getValue("name", index, arr)}
+              onChange={(event) => changeItem("name", event)}
+            />
+          </td>
+          <td>
+            <input
+              value={getValue("category", index, arr)}
+              onChange={(event) => changeItem("category", event)}
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              value={getValue("cost", index, arr)}
+              onChange={(event) => changeItem("cost", event)}
+            />
+          </td>
+          <td>
+            <button
+              onClick={() => {
+                delItem(index);
+              }}
+            >
+              DEL
+            </button>
+          </td>
+        </tr>
+      );
+    });
+  }
+  //---
+
   const result = prods.map((item, index) => {
     return (
       <tr
@@ -568,6 +645,10 @@ let [month, setMonth] = useState(dateOne.getMonth());
           setEditId(item.id);
           setNumIndex(index);
           setChange(true);
+        }}
+        onBlur={() => {
+          setEditId(null);
+          setNumIndex(null);
         }}
       >
         <td>
@@ -663,6 +744,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
         numIndex: {numIndex}
         <br /> editId: {editId}
       </p>
+      {resultTwo}
       <p>День недели {new Date().getDay()}</p>
 
       {dateFirst}
