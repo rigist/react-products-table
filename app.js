@@ -44,7 +44,9 @@ import { useState } from "react";
 090522
 12-04  12-49
 отд
-13-00
+13-00  13-16
+15:02
+17-38
 */
 
 //http://code.mu/ru/javascript/faq/js-compare-dates/
@@ -504,10 +506,30 @@ let [month, setMonth] = useState(dateOne.getMonth());
   // по неделям
 
   //по категориям
+
+  const [startEnd, setStartEnd] = useState([]);
+
+  function changeStartEnd() {
+    // периоды не меняются
+    if (optionW) {
+      const startEndTwo = monthArr[optionW].filter((item) => {
+        //filter
+        return item != " ";
+      });
+
+      console.log("se", startEnd);
+
+      setStartEnd(startEndTwo);
+
+      setDateFirst(startEnd[0]);
+
+      setDateSecond(startEnd[startEnd.length - 1]);
+    }
+  }
   const resultWeeks = prods.map((item) => {
     // если неделя вторая или предпоследняя
 
-    console.log("111", monthArr[optionW][0], monthArr[optionW][6]);
+    //console.log("111", monthArr[optionW][0], monthArr[optionW][6]);
 
     //setDateFirst
 
@@ -635,7 +657,13 @@ let [month, setMonth] = useState(dateOne.getMonth());
       <select value={optionM} onChange={(e) => setOptionM(+e.target.value)}>
         {optionsMonths}
       </select>
-      <select value={optionW} onChange={(e) => setOptionW(+e.target.value)}>
+      <select
+        value={optionW}
+        onChange={(e) => {
+          setOptionW(+e.target.value);
+          changeStartEnd();
+        }}
+      >
         {optionsWeeks}
       </select>
       <input
