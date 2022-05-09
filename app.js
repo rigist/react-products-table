@@ -45,14 +45,17 @@ import { useState } from "react";
 12-04  12-49
 отд
 13-00  13-16
-15:02
-17-38
+15:02-
+17-38  - 18-50
+е
+19-36
+
 */
 
 //http://code.mu/ru/javascript/faq/js-compare-dates/
 
 //после клика на строку, после нажатия add, строка не видна
-
+// в инпут не добавл дата
 //import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
 let nanoid = (t = 21) => {
   let e = "",
@@ -313,9 +316,17 @@ function Table({ name, category, cost, prods, setProds }) {
 
   const [editId, setEditId] = useState(null);
 
-  const [dateFirst, setDateFirst] = useState();
+  const [dateFirst, setDateFirst] = useState(
+    `${new Date().getFullYear()}-${
+      new Date().getMonth() + 1
+    }-${new Date().getDate()}`
+  );
 
-  const [dateSecond, setDateSecond] = useState();
+  const [dateSecond, setDateSecond] = useState(
+    `${new Date().getFullYear()}-${
+      new Date().getMonth() + 1
+    }-${new Date().getDate()}`
+  );
 
   const [dateOne, setDateOne] = useState(new Date());
 
@@ -517,14 +528,23 @@ let [month, setMonth] = useState(dateOne.getMonth());
         return item != " ";
       });
 
-      console.log("se", startEnd);
+      console.log("se", startEndTwo, startEnd);
 
-      setStartEnd(startEndTwo);
+      setStartEnd(...startEndTwo);
 
-      setDateFirst(startEnd[0]);
-
-      setDateSecond(startEnd[startEnd.length - 1]);
+      setDateFirst(
+        `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
+          startEndTwo[0]
+        }`
+      );
+      // value по дате не меняются
+      setDateSecond(
+        `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
+          startEndTwo[startEndTwo.length - 1]
+        }`
+      );
     }
+    console.log("fe", startEnd, dateFirst, dateSecond);
   }
   const resultWeeks = prods.map((item) => {
     // если неделя вторая или предпоследняя
@@ -636,7 +656,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
       return <option key={nanoid()}>{item}</option>;
     });
   }
-
+  // return TABLE
   return (
     <>
       <p>
