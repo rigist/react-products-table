@@ -41,6 +41,10 @@ import { useState } from "react";
 19-31  20-18
 21-23
 
+090522
+12-04  12-49
+отд
+13-00
 */
 
 //http://code.mu/ru/javascript/faq/js-compare-dates/
@@ -315,12 +319,17 @@ function Table({ name, category, cost, prods, setProds }) {
 
   const [optionD, setOptionD] = useState(new Date().getDate());
   const [optionM, setOptionM] = useState(new Date().getMonth() + 1);
+  const [optionW, setOptionW] = useState();
+
+  const [monthArr, setMonthArr] = useState(
+    draw(dateOne.getFullYear(), optionM - 1)
+  );
 
   console.log(dateOne);
 
   /////////////////////////////
   /////////////////////////////
-  console.log("dr", draw(dateOne.getFullYear(), optionM - 1));
+  console.log("dr", monthArr);
 
   function draw(year, month) {
     let arr = range(getLastDay(year, month));
@@ -484,13 +493,28 @@ let [month, setMonth] = useState(dateOne.getMonth());
     let dayB = JSON.stringify(optionD);
     let monthB = JSON.stringify(optionM);
 
-    console.log("A", dayA, monthA);
-    console.log("B", dayB, monthB);
-    console.log("---");
+    //console.log("A", dayA, monthA);
+    //console.log("B", dayB, monthB);
+    //console.log("---");
     return monthA == monthB && dayA == dayB ? item : "";
   });
 
   console.log("MD", resultMD);
+
+  // по неделям
+
+  //по категориям
+  const resultWeeks = prods.map((item) => {
+    // если неделя вторая или предпоследняя
+
+    console.log("111", monthArr[optionW][0], monthArr[optionW][6]);
+
+    //setDateFirst
+
+    // setDateSecond
+
+    return 1 /* item.category == catOne ? item : "" */;
+  });
 
   //---
   const result = prods.map((item, index) => {
@@ -560,13 +584,19 @@ let [month, setMonth] = useState(dateOne.getMonth());
 
   let arrDays = [];
   let arrMonths = [];
+  let arrWeek = [];
 
   arrDays = arrNumbersFill(arrDays, 31);
   arrMonths = arrNumbersFill(arrMonths, 12);
+  arrWeek = arrNumbersFill(arrWeek, monthArr.length - 1);
+
+  console.log("arrWeek", arrWeek);
+
+  console.log("arrMonths", arrMonths);
 
   function arrNumbersFill(arr, num) {
-    for (let i = 1; i <= num; i++) {
-      arr[i] = i;
+    for (let i = 0; i < num; i++) {
+      arr[i] = i + 1;
     }
     return arr;
   }
@@ -574,6 +604,10 @@ let [month, setMonth] = useState(dateOne.getMonth());
   const optionsDays = optionsMaps(arrDays);
 
   const optionsMonths = optionsMaps(arrMonths);
+
+  const optionsWeeks = optionsMaps(arrWeek);
+
+  console.log("optionsMonths", optionsMonths);
 
   function optionsMaps(arr) {
     return arr.map((item, index) => {
@@ -600,6 +634,9 @@ let [month, setMonth] = useState(dateOne.getMonth());
       {optionM}
       <select value={optionM} onChange={(e) => setOptionM(+e.target.value)}>
         {optionsMonths}
+      </select>
+      <select value={optionW} onChange={(e) => setOptionW(+e.target.value)}>
+        {optionsWeeks}
       </select>
       <input
         type="date"
