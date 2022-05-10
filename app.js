@@ -50,6 +50,9 @@ import { useState } from "react";
 е
 19-36
 
+100522
+12-16 12-33
+
 */
 
 //http://code.mu/ru/javascript/faq/js-compare-dates/
@@ -474,7 +477,7 @@ function Table({ name, category, cost, prods, setProds }) {
     let first = new Date(dateFirst);
     let second = new Date(dateSecond);
 
-    console.log(
+    /*  console.log(
       "ifs",
       itemDate,
       first,
@@ -484,7 +487,16 @@ function Table({ name, category, cost, prods, setProds }) {
       JSON.stringify(itemDate),
       JSON.stringify(first),
       JSON.stringify(second)
-    ); //false  "2022-05-07T19:00:00.000Z"
+    ); //false  "2022-05-07T19:00:00.000Z" */
+
+    console.log(
+      "ifs2",
+      itemDate,
+      first,
+      second,
+      itemDate.getTime() >= first.getTime(),
+      itemDate.getTime() <= second.getTime()
+    );
 
     return (
       JSON.stringify(itemDate) >= JSON.stringify(first) &&
