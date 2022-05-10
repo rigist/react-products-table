@@ -32,6 +32,7 @@ import { useState } from "react";
 // http://code.mu/ru/javascript/framework/react/book/prime/states/select/
 // дату сумму
 //52 нед и где-то 2 дня
+// ставилось 5 часов  дня
 /*
 080522   
 11-40  12-42
@@ -52,7 +53,7 @@ import { useState } from "react";
 
 100522
 12-16 12-33
-
+19-56
 */
 
 //http://code.mu/ru/javascript/faq/js-compare-dates/
