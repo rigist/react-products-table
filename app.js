@@ -29,10 +29,12 @@ import { useState } from "react";
 по дням, неделям, месяцам.[$] График также можно
 строить по определенным категориям продуктов.[$]
 */
+// три поля, список категорий, сумма по промежут, сумма  по категориям, график по категориям
 // http://code.mu/ru/javascript/framework/react/book/prime/states/select/
 // дату сумму
 //52 нед и где-то 2 дня
 // ставилось 5 часов  дня
+// вторая дато чтоб больше первой
 /*
 080522   
 11-40  12-42
@@ -342,6 +344,8 @@ function Table({ name, category, cost, prods, setProds }) {
     draw(dateOne.getFullYear(), optionM - 1)
   );
 
+  const [categoryName, setCategoryName] = useState(null);
+
   console.log(dateOne);
 
   /////////////////////////////
@@ -472,6 +476,33 @@ function Table({ name, category, cost, prods, setProds }) {
 
     return JSON.stringify(itemDate) == JSON.stringify(dateOne) ? item : "";
   });
+
+  function changeFirstEndDay(e) {
+    let dateChange = `${new Date().getFullYear()}-${
+      /* new Date().getMonth() */ optionM
+    }-${e}`;
+    setDateFirst(dateChange);
+    setDateSecond(dateChange);
+  }
+
+  function changeMonth(e) {
+    let dateChangeStart = `${new Date().getFullYear()}-${e}-${1}`;
+
+    let newMonth = draw(new Date().getFullYear(), e - 1);
+
+    let endDay = newMonth[newMonth.length - 1].filter((item) => {
+      return item != " ";
+    });
+
+    console.log("endDay", newMonth[newMonth.length - 1], endDay);
+
+    let dateChangeEnd = `${new Date().getFullYear()}-${e}-${
+      endDay[endDay.length - 1]
+    }`;
+    setDateFirst(dateChangeStart);
+    setDateSecond(dateChangeEnd);
+  }
+
   //период
   const resultPeriod = prods.filter((item) => {
     let itemDate = new Date(item.date);
@@ -490,14 +521,14 @@ function Table({ name, category, cost, prods, setProds }) {
       JSON.stringify(second)
     ); //false  "2022-05-07T19:00:00.000Z" */
 
-    console.log(
+    /* console.log(
       "ifs2",
       itemDate,
       first,
       second,
       itemDate.getTime() >= first.getTime(),
       itemDate.getTime() <= second.getTime()
-    );
+    ); */
 
     return (
       JSON.stringify(itemDate) >= JSON.stringify(first) &&
@@ -576,8 +607,41 @@ let [month, setMonth] = useState(dateOne.getMonth());
         }`
       );
     }
+
     console.log("fe", startEnd, dateFirst, dateSecond);
   }
+
+  function changeWeek(e) {
+    let newMonth = draw(new Date().getFullYear(), optionM - 1);
+
+    if (e >= 0) {
+      const startEndTwo = newMonth[e].filter((item) => {
+        //filter
+        return item != " ";
+      });
+
+      //console.log("se", startEndTwo, startEnd);
+
+      setStartEnd(...startEndTwo);
+
+      setDateFirst(
+        `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
+          startEndTwo[0]
+        }`
+      );
+      // value по дате не меняются
+      setDateSecond(
+        `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
+          startEndTwo[startEndTwo.length - 1]
+        }`
+      );
+
+      setOptionW(e);
+
+      console.log("W", e, dateFirst, dateSecond, startEndTwo);
+    }
+  }
+
   const resultWeeks = prods.map((item) => {
     // если неделя вторая или предпоследняя
 
@@ -724,15 +788,15 @@ let [month, setMonth] = useState(dateOne.getMonth());
 
   arrDays = arrNumbersFill(arrDays, 31);
   arrMonths = arrNumbersFill(arrMonths, 12);
-  arrWeek = arrNumbersFill(arrWeek, monthArr.length - 1);
+  arrWeek = arrNumbersFill(arrWeek, monthArr.length, 0);
 
   console.log("arrWeek", arrWeek);
 
   console.log("arrMonths", arrMonths);
 
-  function arrNumbersFill(arr, num) {
+  function arrNumbersFill(arr, num, step = 1) {
     for (let i = 0; i < num; i++) {
-      arr[i] = i + 1;
+      arr[i] = i + step;
     }
     return arr;
   }
@@ -741,7 +805,15 @@ let [month, setMonth] = useState(dateOne.getMonth());
 
   const optionsMonths = optionsMaps(arrMonths);
 
-  const optionsWeeks = optionsMaps(arrWeek);
+  console.log("arrWeek", arrWeek);
+
+  const optionsWeeks = arrWeek.map((item, index) => {
+    return (
+      <option key={nanoid()} value={item}>
+        {item + 1}
+      </option>
+    );
+  });
 
   console.log("optionsMonths", optionsMonths);
 
@@ -765,18 +837,31 @@ let [month, setMonth] = useState(dateOne.getMonth());
       {dateSecond}
       <br />
       {optionD}
-      <select value={optionD} onChange={(e) => setOptionD(+e.target.value)}>
+      <select
+        value={optionD}
+        onChange={(e) => {
+          setOptionD(+e.target.value);
+          changeFirstEndDay(+e.target.value);
+        }}
+      >
         {optionsDays}
       </select>
       {optionM}
-      <select value={optionM} onChange={(e) => setOptionM(+e.target.value)}>
+      <select
+        value={optionM}
+        onChange={(e) => {
+          setOptionM(+e.target.value);
+          changeMonth(+e.target.value);
+        }}
+      >
         {optionsMonths}
       </select>
       <select
         value={optionW}
         onChange={(e) => {
-          setOptionW(+e.target.value);
-          changeStartEnd();
+          // setOptionW(prev => +e.target.value);
+          changeWeek(+e.target.value);
+          //changeStartEnd();
         }}
       >
         {optionsWeeks}
@@ -795,6 +880,11 @@ let [month, setMonth] = useState(dateOne.getMonth());
         onChange={(e) => {
           setDateSecond(e.target.value);
         }}
+      />
+      {categoryName}
+      <input
+        value={categoryName}
+        onChange={(e) => setCategoryName(e.target.value)}
       />
 
       <table>
