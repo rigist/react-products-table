@@ -29,12 +29,15 @@ import { useState } from "react";
 по дням, неделям, месяцам.[$] График также можно
 строить по определенным категориям продуктов.[$]
 */
-// три поля, список категорий, сумма по промежут, сумма  по категориям, график по категориям
+// три поля, выпадающий список категорий, сумма по промежут, сумма  по категориям, график по категориям
 // http://code.mu/ru/javascript/framework/react/book/prime/states/select/
 // дату сумму
 //52 нед и где-то 2 дня
 // ставилось 5 часов  дня
 // вторая дато чтоб больше первой
+// сброс строки  с инструм
+//после клика на строку, после нажатия add, строка не видна
+// в инпут не добавл дата
 /*
 080522   
 11-40  12-42
@@ -60,8 +63,6 @@ import { useState } from "react";
 
 //http://code.mu/ru/javascript/faq/js-compare-dates/
 
-//после клика на строку, после нажатия add, строка не видна
-// в инпут не добавл дата
 //import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
 let nanoid = (t = 21) => {
   let e = "",
@@ -346,11 +347,11 @@ function Table({ name, category, cost, prods, setProds }) {
 
   const [categoryName, setCategoryName] = useState(null);
 
-  console.log(dateOne);
+  //console.log(dateOne);
 
   /////////////////////////////
   /////////////////////////////
-  console.log("dr", monthArr);
+  //console.log("dr", monthArr);
 
   function draw(year, month) {
     let arr = range(getLastDay(year, month));
@@ -494,7 +495,7 @@ function Table({ name, category, cost, prods, setProds }) {
       return item != " ";
     });
 
-    console.log("endDay", newMonth[newMonth.length - 1], endDay);
+    //console.log("endDay", newMonth[newMonth.length - 1], endDay);
 
     let dateChangeEnd = `${new Date().getFullYear()}-${e}-${
       endDay[endDay.length - 1]
@@ -538,18 +539,22 @@ function Table({ name, category, cost, prods, setProds }) {
     );
   });
 
-  console.log("resultP", resultPeriod);
+  //console.log("resultP", resultPeriod);
 
   resultTwo = tableMap(resultPeriod);
 
   //по категориям
-  const resultCategory = prods.map((item) => {
-    let catOne = "канц";
+  const resultCategory = prods.filter((item) => {
+    if (categoryName !== null) {
+      let catOne = categoryName;
 
-    return item.category == catOne ? item : "";
+      return item.category == catOne ? item : "";
+    }
   });
 
   console.log("catOne", resultCategory);
+
+  const resultThreeCategory = tableMap(resultCategory);
 
   //дням, неделям, месяцам
   /*  
@@ -575,7 +580,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
     return monthA == monthB && dayA == dayB ? item : "";
   });
 
-  console.log("MD", resultMD);
+  //console.log("MD", resultMD);
 
   // по неделям
 
@@ -591,7 +596,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
         return item != " ";
       });
 
-      console.log("se", startEndTwo, startEnd);
+      //console.log("se", startEndTwo, startEnd);
 
       setStartEnd(...startEndTwo);
 
@@ -608,7 +613,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
       );
     }
 
-    console.log("fe", startEnd, dateFirst, dateSecond);
+    //console.log("fe", startEnd, dateFirst, dateSecond);
   }
 
   function changeWeek(e) {
@@ -638,7 +643,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
 
       setOptionW(e);
 
-      console.log("W", e, dateFirst, dateSecond, startEndTwo);
+      //console.log("W", e, dateFirst, dateSecond, startEndTwo);
     }
   }
 
@@ -656,14 +661,14 @@ let [month, setMonth] = useState(dateOne.getMonth());
 
   //---
   function tableMap(arr) {
-    console.log("arr", arr);
+    //console.log("arr", arr);
 
     return arr.map((item, index, arr) => {
       return (
         <tr
           key={item.id}
           onClick={() => {
-            console.log(index);
+            //console.log(index);
             setEditId(item.id);
             setNumIndex(index);
             setChange(true);
@@ -718,7 +723,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
       <tr
         key={item.id}
         onClick={() => {
-          console.log(index);
+          //console.log(index);
           setEditId(item.id);
           setNumIndex(index);
           setChange(true);
@@ -790,9 +795,9 @@ let [month, setMonth] = useState(dateOne.getMonth());
   arrMonths = arrNumbersFill(arrMonths, 12);
   arrWeek = arrNumbersFill(arrWeek, monthArr.length, 0);
 
-  console.log("arrWeek", arrWeek);
+  //console.log("arrWeek", arrWeek);
 
-  console.log("arrMonths", arrMonths);
+  //console.log("arrMonths", arrMonths);
 
   function arrNumbersFill(arr, num, step = 1) {
     for (let i = 0; i < num; i++) {
@@ -805,7 +810,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
 
   const optionsMonths = optionsMaps(arrMonths);
 
-  console.log("arrWeek", arrWeek);
+  //console.log("arrWeek", arrWeek);
 
   const optionsWeeks = arrWeek.map((item, index) => {
     return (
@@ -815,7 +820,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
     );
   });
 
-  console.log("optionsMonths", optionsMonths);
+  //console.log("optionsMonths", optionsMonths);
 
   function optionsMaps(arr) {
     return arr.map((item, index) => {
@@ -829,7 +834,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
         numIndex: {numIndex}
         <br /> editId: {editId}
       </p>
-      {resultTwo}
+      {categoryName === null ? resultTwo : resultThreeCategory}
       <p>День недели {new Date().getDay()}</p>
 
       {dateFirst}
@@ -871,7 +876,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
         value={dateFirst}
         onChange={(e) => {
           setDateFirst(e.target.value);
-          console.log("dateFirst", dateFirst);
+          //console.log("dateFirst", dateFirst);
         }}
       />
       <input
@@ -899,6 +904,14 @@ let [month, setMonth] = useState(dateOne.getMonth());
         {result}
         {sum()}
       </table>
+      <div id="parent">
+        <input id="elem" />
+        <ul id="list">
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+        </ul>
+      </div>
     </>
   );
 }
