@@ -59,6 +59,13 @@ import { useState } from "react";
 100522
 12-16 12-33
 19-56
+
+110522
+120522
+20-06
+
+130522 
+17-01
 */
 
 //http://code.mu/ru/javascript/faq/js-compare-dates/
@@ -133,6 +140,12 @@ export default function App() {
     );
   }); */
 
+  let arrList = prods.map((item, index) => {
+    return item.category;
+  });
+
+  let listArr = [...new Set(arrList)];
+
   return (
     <div className="App">
       <Table
@@ -141,6 +154,7 @@ export default function App() {
         name={prods[0].name}
         category={prods[0].category}
         cost={prods[0].cost}
+        listArr={listArr}
       />
       {/*  {result} */}
       {/*  <p>{prods[1] ? prods[1].name : ""}</p> */}
@@ -155,7 +169,11 @@ export default function App() {
       /> */}
       <br />
 
-      <InputOne prods={prods} setProds={setProds} /* set={setName} */ />
+      <InputOne
+        prods={prods}
+        setProds={setProds}
+        listArr={listArr} /* set={setName} */
+      />
       {/*  <InputOne set={setCategory} />
       <InputOne set={setCost} /> */}
     </div>
@@ -167,7 +185,7 @@ export default function App() {
 //------------InputOne--------------
 //------------InputOne--------------
 
-function InputOne({ prods, setProds }) {
+function InputOne({ prods, setProds, listArr }) {
   const [value, setValue] = useState("");
 
   const [valueOne, setValueOne] = useState("");
@@ -191,12 +209,6 @@ function InputOne({ prods, setProds }) {
       { date: valueDate, name: valueOne, category: valueTwo, cost: valueThree }
     ]);
   }
-
-  let arrList = prods.map((item, index) => {
-    return item.category;
-  });
-
-  let listArr = [...new Set(arrList)];
 
   //console.log("listOne", listOne);
 
@@ -239,6 +251,7 @@ function InputOne({ prods, setProds }) {
         value={valueTwo}
         onChange={(e) => {
           setValueTwo(e.target.value);
+
           //console.log(prods);
         }}
       />
@@ -273,7 +286,7 @@ function InputOne({ prods, setProds }) {
         </select>
         <p>ваш выбор: {prods[+value].category}</p>
       </div> */}
-      {listOne}
+      {valueTwo !== "" ? listOne : "*"}
     </div>
   );
 }
@@ -284,7 +297,7 @@ function InputOne({ prods, setProds }) {
 //-------------------Table------------------
 //-------------------Table------------------
 
-function Table({ name, category, cost, prods, setProds }) {
+function Table({ name, category, cost, prods, setProds, listArr }) {
   function delItem(index) {
     // console.log(index);
     setProds([
@@ -552,7 +565,7 @@ function Table({ name, category, cost, prods, setProds }) {
     }
   });
 
-  console.log("catOne", resultCategory);
+  //console.log("catOne", resultCategory);
 
   const resultThreeCategory = tableMap(resultCategory);
 
@@ -821,6 +834,14 @@ let [month, setMonth] = useState(dateOne.getMonth());
   });
 
   //console.log("optionsMonths", optionsMonths);
+
+  const listArrAddEnd = ["по категории", ...listArr, "по дате"]
+
+  console.log("l", listArrAddEnd)
+
+  const listOptions = listArrAddEnd.map((item, index) => {
+    return <option key={nanoid()}>{item}</option>;
+  });
 
   function optionsMaps(arr) {
     return arr.map((item, index) => {
