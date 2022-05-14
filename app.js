@@ -29,7 +29,7 @@ import { useState } from "react";
 по дням, неделям, месяцам.[$] График также можно
 строить по определенным категориям продуктов.[$]
 */
-// три поля[x], выпадающий список категорий[], сумма по промежут[x], сумма  по категориям[x], график по категориям[x]
+// три поля[x], выпадающий список категорий[x], сумма по промежут[x], сумма  по категориям[x], график по категориям[x], стили[], норм код[]
 // http://code.mu/ru/javascript/framework/react/book/prime/states/select/
 // дату сумму
 //52 нед и где-то 2 дня
@@ -200,14 +200,14 @@ export default function App() {
       id: nanoid(),
       date: "2022-5-7",
       name: "ручка",
-      category: "канц",
+      category: "канцелярия",
       cost: 10
     },
     {
       id: nanoid(),
       date: "2022-5-8",
-      name: "отверт",
-      category: "инстр",
+      name: "отвертка",
+      category: "инструменты",
       cost: 10
     },
     {
@@ -223,7 +223,7 @@ export default function App() {
         new Date().getMonth() + 1
       }-${new Date().getDate()}`,
       name: "циркуль",
-      category: "канц",
+      category: "канцелярия",
       cost: 10
     }
   ];
@@ -318,8 +318,8 @@ function InputOne({ prods, setProds, listArr }) {
 
   const listOne = listArr.map((item) => {
     return (
-      <ul key={nanoid()}>
-        <li
+      
+        <li key={nanoid()}
           onClick={(e) => {
             setValueTwo(e.target.innerHTML);
             //  console.log(e.target.innerHTML);
@@ -327,7 +327,7 @@ function InputOne({ prods, setProds, listArr }) {
         >
           {item}
         </li>
-      </ul>
+      
     );
   });
 
@@ -351,8 +351,9 @@ function InputOne({ prods, setProds, listArr }) {
           //console.log(prods);
         }}
       />
-
+      <span id="parent">
       <input
+      id="elem"
        placeholder = "категория"
         value={valueTwo}
         onChange={(e) => {
@@ -360,7 +361,12 @@ function InputOne({ prods, setProds, listArr }) {
 
           //console.log(prods);
         }}
-      />
+      /> 
+      <ul id="list">
+        {valueTwo !== "" ? listOne : ""}
+      </ul>
+      
+      </span>
       <input
        placeholder = "сумма"
         type="number"
@@ -393,7 +399,7 @@ function InputOne({ prods, setProds, listArr }) {
         </select>
         <p>ваш выбор: {prods[+value].category}</p>
       </div> */}
-      {valueTwo !== "" ? listOne : "*"}
+      {/* valueTwo !== "" ? listOne : "*" */}
     </div>
   );
 }
