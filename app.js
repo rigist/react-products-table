@@ -29,7 +29,7 @@ import { useState } from "react";
 по дням, неделям, месяцам.[$] График также можно
 строить по определенным категориям продуктов.[$]
 */
-// три поля, выпадающий список категорий, сумма по промежут, сумма  по категориям, график по категориям
+// три поля[x], выпадающий список категорий[], сумма по промежут[x], сумма  по категориям[x], график по категориям[x]
 // http://code.mu/ru/javascript/framework/react/book/prime/states/select/
 // дату сумму
 //52 нед и где-то 2 дня
@@ -344,6 +344,7 @@ function InputOne({ prods, setProds, listArr }) {
         }}
       />
       <input
+        placeholder = "наименование"
         value={valueOne}
         onChange={(e) => {
           setValueOne(e.target.value);
@@ -352,6 +353,7 @@ function InputOne({ prods, setProds, listArr }) {
       />
 
       <input
+       placeholder = "категория"
         value={valueTwo}
         onChange={(e) => {
           setValueTwo(e.target.value);
@@ -360,6 +362,7 @@ function InputOne({ prods, setProds, listArr }) {
         }}
       />
       <input
+       placeholder = "сумма"
         type="number"
         value={valueThree}
         onChange={(e) => {
@@ -711,12 +714,12 @@ let [month, setMonth] = useState(dateOne.getMonth());
             setNumIndex(null);
           }}
         >
-          <td>
+          {/* <td>
             <input
               value={getValue("date", index, arr)}
               onChange={(event) => changeItem("date", event)}
             />
-          </td>
+          </td> */}
           <td>
             <input
               value={getValue("name", index, arr)}
@@ -808,12 +811,12 @@ let [month, setMonth] = useState(dateOne.getMonth());
     );
   });
 
-  function sum() {
+  function sum(arr = prods) {
     //console.log("sum");
     //console.log("prods[0].cost", prods[0].cost);
     let summa = 0;
-    for (let i = 0; i < prods.length; i++) {
-      summa = +prods[i].cost + summa;
+    for (let i = 0; i < arr.length; i++) {
+      summa = +arr[i].cost + summa;
       //console.log("prods[i].cost", prods[i].cost);
     }
     //console.log("summa", summa);
@@ -878,7 +881,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
 
  <table>
         <tr>
-          <td>Дата</td>
+          {/* <td>Дата</td> */}
           <td>Наимен</td>
           <td>Катег</td>
           <td>Цена</td>
@@ -886,7 +889,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
         </tr>
 
        {categoryName === null ? resultTwo : resultThreeCategory}
-        {sum()}
+       <span>Сумма: </span> {categoryName === null ? sum(resultPeriod) : sum(resultCategory) }
       </table>
 
 
@@ -894,11 +897,11 @@ let [month, setMonth] = useState(dateOne.getMonth());
       
     {/*   <p>День недели {new Date().getDay()}</p> */}
 
-      {dateFirst}
-      <br />
+      <span>c: </span>{dateFirst}
+       <span> по: </span>
       {dateSecond}
       <br />
-      {optionD}
+       <span> день: </span>
       <select
         value={optionD}
         onChange={(e) => {
@@ -906,9 +909,9 @@ let [month, setMonth] = useState(dateOne.getMonth());
           changeFirstEndDay(+e.target.value);
         }}
       >
-        {optionsDays}
-      </select>
-      {optionM}
+       {optionsDays}
+      </select>  <span> месяц: </span>
+      {/* optionM */}
       <select
         value={optionM}
         onChange={(e) => {
@@ -918,6 +921,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
       >
         {optionsMonths}
       </select>
+      <span> неделя: </span>
       <select
         value={optionW}
         onChange={(e) => {
@@ -928,6 +932,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
       >
         {optionsWeeks}
       </select>
+      <span> период: </span>
       <input
         type="date"
         value={dateFirst}
@@ -936,6 +941,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
           //console.log("dateFirst", dateFirst);
         }}
       />
+      
       <input
         type="date"
         value={dateSecond}
@@ -943,11 +949,12 @@ let [month, setMonth] = useState(dateOne.getMonth());
           setDateSecond(e.target.value);
         }}
       />
-      {categoryName}
-      <input
+      {/* categoryName */}
+      {/* <input
         value={categoryName}
         onChange={(e) => setCategoryName(e.target.value)}
-      />
+      /> */}
+      <span> по категории/дате: </span>
       <select
       onChange={(e) => {
         
