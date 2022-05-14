@@ -1,75 +1,32 @@
 import React from "react";
 import "./styles.css";
 import { useState } from "react";
-//260422 16-02
-//270422  9-11
+
 /*
 Реализовать проект учета покупок.
 Юзер после похода в магазин записывает
 в наш сервис каждую покупку с ее стоимостью.
 Покупки вводятся по одному в специальную форму,
 которая имеет три поля: название продукта, его категорию
-(еда, одежда и тп, категорию юзер придумывает сам) и цену.[]
-Пользователь может написать категорию продукта в инпут,[x]
-либо выбрать ее из списка ранее использованных им категорий.[$]
-На экране должен быть виден список продуктов (в виде таблицы),[]
+(еда, одежда и тп, категорию юзер придумывает сам) и цену.
+Пользователь может написать категорию продукта в инпут,
+либо выбрать ее из списка ранее использованных им категорий.
+На экране должен быть виден список продуктов (в виде таблицы),
 сделанных за сегодня. В этот список можно добавлять
 новые продукты, удалять неверно добавленные,
-и редактировать.[]
+и редактировать.
 Юзер может также посмотреть продукты
-за любой день.[] Кроме того можно выбрать период
+за любой день. Кроме того можно выбрать период
 времени, за который необходимо вывести список
-продуктов.[]
+продуктов.
 При просмотре продуктов снизу таблицы должна
-выводится их суммарная стоимость.[x] Можно посмотреть
-потраченную сумму за любой промежуток времени.[]
+выводится их суммарная стоимость. Можно посмотреть
+потраченную сумму за любой промежуток времени.
 Можно посмотреть сумму за конкретную категорию
-продуктов.[]
+продуктов.
 Можно построить график трат, детализированный
-по дням, неделям, месяцам.[$] График также можно
-строить по определенным категориям продуктов.[$]
-*/
-// три поля[x], выпадающий список категорий[x], сумма по промежут[x], сумма  по категориям[x], график по категориям[x], стили[], норм код[]
-// http://code.mu/ru/javascript/framework/react/book/prime/states/select/
-// дату сумму
-//52 нед и где-то 2 дня
-// ставилось 5 часов  дня
-// вторая дато чтоб больше первой
-// сброс строки  с инструм
-//после клика на строку, после нажатия add, строка не видна
-// в инпут не добавл дата
-/*
-080522   
-11-40  12-42
-17-28 18-25 дни option
-отд
-18-36 е
-19-31  20-18
-21-23
-
-090522
-12-04  12-49
-отд
-13-00  13-16
-15:02-
-17-38  - 18-50
-е
-19-36
-
-100522
-12-16 12-33
-19-56
-
-110522
-120522
-20-06
-
-130522 
-17-01
-21-48
-
-140522
-11-28
+по дням, неделям, месяцам. График также можно
+строить по определенным категориям продуктов.
 */
 
 //import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
@@ -94,9 +51,8 @@ let nanoid = (t = 21) => {
 /////////////////////////////
 /////////////////////////////
 /////////////////////////////
-
+//рисует календарь
 function draw(year, month) {
-  //рисует календарь
   let arr = range(getLastDay(year, month));
   let firstWeekDay = getFirstWeekDay(year, month);
   let lastWeekDay = getLastWeekDay(year, month);
@@ -599,17 +555,77 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
   return (
     <>
       <table>
-        <tr>
+        <thead>
           <td>Наимен</td>
           <td>Катег</td>
           <td>Цена</td>
           <td> </td>
-        </tr>
+        </thead>
         {categoryName === null ? resultTwo : resultThreeCategory}
-        <span>Сумма: </span>{" "}
-        {categoryName === null ? sum(resultPeriod) : sum(resultCategory)}
-        <span> руб. </span>
       </table>
+
+      <ChangesInputs
+        categoryName={categoryName}
+        resultPeriod={resultPeriod}
+        sum={sum}
+        resultCategory={resultCategory}
+        dateFirst={dateFirst}
+        dateSecond={dateSecond}
+        optionD={optionD}
+        setOptionD={setOptionD}
+        changeFirstEndDay={changeFirstEndDay}
+        optionsDays={optionsDays}
+        optionM={optionM}
+        setOptionM={setOptionM}
+        changeMonth={changeMonth}
+        optionsMonths={optionsMonths}
+        optionW={optionW}
+        changeWeek={changeWeek}
+        optionsWeeks={optionsWeeks}
+        setDateFirst={setDateFirst}
+        setDateSecond={setDateSecond}
+        setCategoryName={setCategoryName}
+        listOptions={listOptions}
+      />
+    </>
+  );
+}
+///////////////////////
+///////////////////////
+///////////////////////
+///////////////////////
+///////////////////////
+
+function ChangesInputs({
+  categoryName,
+  resultPeriod,
+  sum,
+  resultCategory,
+  dateFirst,
+  dateSecond,
+  optionD,
+  setOptionD,
+  changeFirstEndDay,
+  optionsDays,
+  optionM,
+  setOptionM,
+  changeMonth,
+  optionsMonths,
+  optionW,
+  changeWeek,
+  optionsWeeks,
+  setDateFirst,
+  setDateSecond,
+  setCategoryName,
+  listOptions
+}) {
+  return (
+    <>
+      <span>Сумма: </span>{" "}
+      {categoryName === null ? sum(resultPeriod) : sum(resultCategory)}
+      <span> руб. </span>
+      <br />
+      <br />
       <span>c: </span>
       {dateFirst}
       <span> по: </span>
