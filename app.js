@@ -92,105 +92,100 @@ let nanoid = (t = 21) => {
   return e;
 };
 
+/////////////////////////////
+/////////////////////////////
+//console.log("dr", monthArr);
 
-  /////////////////////////////
-  /////////////////////////////
-  //console.log("dr", monthArr);
+function draw(year, month) {
+  //рисует календарь
+  let arr = range(getLastDay(year, month));
+  let firstWeekDay = getFirstWeekDay(year, month);
+  let lastWeekDay = getLastWeekDay(year, month);
+  let nums = chunk(normalize(arr, firstWeekDay, 6 - lastWeekDay), 7);
 
-  function draw(year, month) {
-    let arr = range(getLastDay(year, month));
-    let firstWeekDay = getFirstWeekDay(year, month);
-    let lastWeekDay = getLastWeekDay(year, month);
-    let nums = chunk(normalize(arr, firstWeekDay, 6 - lastWeekDay), 7);
+  return nums;
+} //draw
 
-    return nums;
-  } //draw
+function range(count) {
+  let arr = [];
+  for (let i = 0; i < count; i++) {
+    arr[i] = i + 1;
+  } //for
 
-  function range(count) {
-    let arr = [];
-    for (let i = 0; i < count; i++) {
-      arr[i] = i + 1;
+  return arr;
+}
+
+function getLastDay(year, month) {
+  let date = new Date(year, month + 1, 0);
+
+  return date.getDate();
+}
+/////////////////////
+function getFirstWeekDay(year, month) {
+  let date = new Date(year, month, 1);
+
+  let dayWeek = date.getDay();
+
+  if (dayWeek > 0) {
+    dayWeek--;
+  } //if
+  else if (dayWeek == 0) {
+    dayWeek = 6;
+  }
+
+  return dayWeek;
+}
+
+function getLastWeekDay(year, month) {
+  let date = new Date(year, month + 1, 0);
+
+  let dayWeek = date.getDay();
+
+  if (dayWeek > 0) {
+    dayWeek--;
+  } //if
+  else if (dayWeek == 0) {
+    dayWeek = 6;
+  }
+
+  return dayWeek;
+}
+
+function normalize(arr, left, right) {
+  for (let i = 0; i < left; i++) {
+    arr.unshift(" ");
+  } //for
+
+  for (let i = 0; i < right; i++) {
+    arr.push(" ");
+  } //for
+
+  return arr;
+}
+
+//////////////////////
+function chunk(arr, n) {
+  let arrBig = [];
+
+  let k = 0;
+
+  while (k < arr.length) {
+    let arrSmall = [];
+    arrSmall.length = n;
+
+    for (let j = 0; j < arrSmall.length; j++) {
+      arrSmall[j] = arr[k];
+      k++;
     } //for
 
-    return arr;
-  }
+    arrBig.push(arrSmall);
+  } //while
 
-  function getLastDay(year, month) {
-    let date = new Date(year, month + 1, 0);
+  return arrBig;
+}
 
-    return date.getDate();
-  }
-  /////////////////////
-  function getFirstWeekDay(year, month) {
-    let date = new Date(year, month, 1);
-
-    let dayWeek = date.getDay();
-
-    if (dayWeek > 0) {
-      dayWeek--;
-    } //if
-    else if (dayWeek == 0) {
-      dayWeek = 6;
-    }
-
-    return dayWeek;
-  }
-
-  function getLastWeekDay(year, month) {
-    let date = new Date(year, month + 1, 0);
-
-    let dayWeek = date.getDay();
-
-    if (dayWeek > 0) {
-      dayWeek--;
-    } //if
-    else if (dayWeek == 0) {
-      dayWeek = 6;
-    }
-
-    return dayWeek;
-  }
-
-  function normalize(arr, left, right) {
-    for (let i = 0; i < left; i++) {
-      arr.unshift(" ");
-    } //for
-
-    for (let i = 0; i < right; i++) {
-      arr.push(" ");
-    } //for
-
-    return arr;
-  }
-
-  //////////////////////
-  function chunk(arr, n) {
-    let arrBig = [];
-
-    let k = 0;
-
-    while (k < arr.length) {
-      let arrSmall = [];
-      arrSmall.length = n;
-
-      for (let j = 0; j < arrSmall.length; j++) {
-        arrSmall[j] = arr[k];
-        k++;
-      } //for
-
-      arrBig.push(arrSmall);
-    } //while
-
-    return arrBig;
-  }
-
-  /////////////////////////////
-  /////////////////////////////
-
-
-
-
-
+/////////////////////////////
+/////////////////////////////
 
 export default function App() {
   //{name, category, cost}
@@ -228,6 +223,7 @@ export default function App() {
     }
   ];
 
+  //архив с товарами
   const [prods, setProds] = useState(arrProd);
 
   /*   const [name, setName] = useState("");
@@ -247,11 +243,12 @@ export default function App() {
   let arrList = prods.map((item, index) => {
     return item.category;
   });
-
+  //архив категорий продуктов без повторов
   let listArr = [...new Set(arrList)];
 
   return (
     <div className="App">
+      <p>Учет покупок</p>
       <Table
         prods={prods}
         setProds={setProds}
@@ -290,22 +287,26 @@ export default function App() {
 //------------InputOne--------------
 
 function InputOne({ prods, setProds, listArr }) {
-  const [value, setValue] = useState("");
+  /*  const [value, setValue] = useState(""); */
 
+  //наименование
   const [valueOne, setValueOne] = useState("");
+  //категория
   const [valueTwo, setValueTwo] = useState("");
+  //цена
   const [valueThree, setValueThree] = useState("");
+  //дата
   const [valueDate, setValueDate] = useState("");
 
   //const texts = ["text1", "text2", "text3", "text4"];
 
-  const options = prods.map((item, index) => {
+  /*  const options = prods.map((item, index) => {
     return (
       <option key={nanoid()} value={index}>
         {item.category}
       </option>
     );
-  });
+  }); */
 
   function addItem() {
     setProds([
@@ -316,25 +317,26 @@ function InputOne({ prods, setProds, listArr }) {
 
   //console.log("listOne", listOne);
 
+  // список неповторяющихся категорий
   const listOne = listArr.map((item) => {
     return (
-      
-        <li key={nanoid()}
-          onClick={(e) => {
-            setValueTwo(e.target.innerHTML);
-            //  console.log(e.target.innerHTML);
-          }}
-        >
-          {item}
-        </li>
-      
+      <li
+        key={nanoid()}
+        onClick={(e) => {
+          setValueTwo(e.target.innerHTML);
+          //  console.log(e.target.innerHTML);
+        }}
+      >
+        {item}
+      </li>
     );
   });
 
   //const listOne
 
   return (
-    <div>
+    <div className="container">
+      <p> Добавить запись: </p>
       <input
         type="date"
         value={valueDate}
@@ -344,7 +346,7 @@ function InputOne({ prods, setProds, listArr }) {
         }}
       />
       <input
-        placeholder = "наименование"
+        placeholder="наименование"
         value={valueOne}
         onChange={(e) => {
           setValueOne(e.target.value);
@@ -352,23 +354,20 @@ function InputOne({ prods, setProds, listArr }) {
         }}
       />
       <span id="parent">
-      <input
-      id="elem"
-       placeholder = "категория"
-        value={valueTwo}
-        onChange={(e) => {
-          setValueTwo(e.target.value);
+        <input
+          id="elem"
+          placeholder="категория"
+          value={valueTwo}
+          onChange={(e) => {
+            setValueTwo(e.target.value);
 
-          //console.log(prods);
-        }}
-      /> 
-      <ul id="list">
-        {valueTwo !== "" ? listOne : ""}
-      </ul>
-      
+            //console.log(prods);
+          }}
+        />
+        <ul id="list">{valueTwo !== "" ? listOne : ""}</ul>
       </span>
       <input
-       placeholder = "сумма"
+        placeholder="сумма"
         type="number"
         value={valueThree}
         onChange={(e) => {
@@ -411,6 +410,8 @@ function InputOne({ prods, setProds, listArr }) {
 //-------------------Table------------------
 
 function Table({ name, category, cost, prods, setProds, listArr }) {
+  
+  //удалить запись из таблицы
   function delItem(index) {
     // console.log(index);
     setProds([
@@ -420,7 +421,7 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
   }
 
   const [change, setChange] = useState(false);
-
+ // индекс строки
   const [numIndex, setNumIndex] = useState(null);
 
   /* function changeItem(e) {
@@ -446,15 +447,15 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
       <input value={item.name} onChange={changeItem} />
     );
   } */
-
+  // id строки
   const [editId, setEditId] = useState(null);
-
+  //первая дата периода
   const [dateFirst, setDateFirst] = useState(
     `${new Date().getFullYear()}-${
       new Date().getMonth() + 1
     }-${new Date().getDate()}`
   );
-
+  // вторая дата периода
   const [dateSecond, setDateSecond] = useState(
     `${new Date().getFullYear()}-${
       new Date().getMonth() + 1
@@ -477,8 +478,6 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
   const [categoryName, setCategoryName] = useState(null);
 
   //console.log(dateOne);
-
-
 
   function getValue(prop, index, arr = prods) {
     //console.log(prop, index);
@@ -584,7 +583,6 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
 
   /* if(categoryName == "по дате"){console.log("categoryName", categoryName);
   } */
- 
 
   const resultCategory = prods.filter((item) => {
     if (categoryName !== null && categoryName !== "по категориям") {
@@ -593,7 +591,7 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
       return item.category == catOne ? item : "";
     }
   });
-  
+
   //console.log("catOne", resultCategory);
 
   const resultThreeCategory = tableMap(resultCategory);
@@ -864,7 +862,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
 
   //console.log("optionsMonths", optionsMonths);
 
-  const listArrAddEnd = ["по категории", ...listArr, "по дате"]
+  const listArrAddEnd = ["по категории", ...listArr, "по дате"];
 
   //console.log("l", listArrAddEnd)
 
@@ -884,8 +882,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
         numIndex: {numIndex}
         <br /> editId: {editId}
       </p> */}
-
- <table>
+      <table>
         <tr>
           {/* <td>Дата</td> */}
           <td>Наимен</td>
@@ -893,21 +890,17 @@ let [month, setMonth] = useState(dateOne.getMonth());
           <td>Цена</td>
           <td> </td>
         </tr>
-
-       {categoryName === null ? resultTwo : resultThreeCategory}
-       <span>Сумма: </span> {categoryName === null ? sum(resultPeriod) : sum(resultCategory) }
+        {categoryName === null ? resultTwo : resultThreeCategory}
+        <span>Сумма: </span>{" "}
+        {categoryName === null ? sum(resultPeriod) : sum(resultCategory)}
       </table>
-
-
-
-      
-    {/*   <p>День недели {new Date().getDay()}</p> */}
-
-      <span>c: </span>{dateFirst}
-       <span> по: </span>
+      {/*   <p>День недели {new Date().getDay()}</p> */}
+      <span>c: </span>
+      {dateFirst}
+      <span> по: </span>
       {dateSecond}
       <br />
-       <span> день: </span>
+      <span> день: </span>
       <select
         value={optionD}
         onChange={(e) => {
@@ -915,8 +908,9 @@ let [month, setMonth] = useState(dateOne.getMonth());
           changeFirstEndDay(+e.target.value);
         }}
       >
-       {optionsDays}
-      </select>  <span> месяц: </span>
+        {optionsDays}
+      </select>{" "}
+      <span> месяц: </span>
       {/* optionM */}
       <select
         value={optionM}
@@ -937,7 +931,8 @@ let [month, setMonth] = useState(dateOne.getMonth());
         }}
       >
         {optionsWeeks}
-      </select>
+      </select>{" "}
+      <br />
       <span> период: </span>
       <input
         type="date"
@@ -947,7 +942,6 @@ let [month, setMonth] = useState(dateOne.getMonth());
           //console.log("dateFirst", dateFirst);
         }}
       />
-      
       <input
         type="date"
         value={dateSecond}
@@ -959,20 +953,22 @@ let [month, setMonth] = useState(dateOne.getMonth());
       {/* <input
         value={categoryName}
         onChange={(e) => setCategoryName(e.target.value)}
-      /> */}
+      /> */}{" "}
+      <br />
       <span> по категории/дате: </span>
       <select
-      onChange={(e) => {
-        
-        if(e.target.value != "по дате")
-        {setCategoryName(e.target.value)}
-        else {setCategoryName(null)}
-        }
-        }
-      >{listOptions}</select>
-
-      <br/>
-     {/*  <table>
+        onChange={(e) => {
+          if (e.target.value != "по дате") {
+            setCategoryName(e.target.value);
+          } else {
+            setCategoryName(null);
+          }
+        }}
+      >
+        {listOptions}
+      </select>
+      <br />
+      {/*  <table>
         <tr>
           <td>Дата</td>
           <td>Наимен</td>
