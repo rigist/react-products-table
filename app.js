@@ -72,8 +72,6 @@ import { useState } from "react";
 11-28
 */
 
-//http://code.mu/ru/javascript/faq/js-compare-dates/
-
 //import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
 let nanoid = (t = 21) => {
   let e = "",
@@ -94,7 +92,8 @@ let nanoid = (t = 21) => {
 
 /////////////////////////////
 /////////////////////////////
-//console.log("dr", monthArr);
+/////////////////////////////
+/////////////////////////////
 
 function draw(year, month) {
   //рисует календарь
@@ -186,6 +185,10 @@ function chunk(arr, n) {
 
 /////////////////////////////
 /////////////////////////////
+/////////////////////////////
+/////////////////////////////
+/////////////////////////////
+/////////////////////////////
 
 export default function App() {
   //{name, category, cost}
@@ -223,27 +226,13 @@ export default function App() {
     }
   ];
 
-  //архив с товарами
+  //массив с товарами
   const [prods, setProds] = useState(arrProd);
-
-  /*   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
-  const [cost, setCost] = useState(""); */
-
-  /* const result = prods.map((item) => {
-    return (
-      <p key={nanoid()}>
-        <span>{item.name}</span>,<span>{item.category}</span>,
-        <span>{item.cost}</span>
-        <button onClick={() => {}}>edit</button>
-      </p>
-    );
-  }); */
 
   let arrList = prods.map((item, index) => {
     return item.category;
   });
-  //архив категорий продуктов без повторов
+  //массив категорий продуктов без повторов
   let listArr = [...new Set(arrList)];
 
   return (
@@ -257,26 +246,10 @@ export default function App() {
         cost={prods[0].cost}
         listArr={listArr}
       />
-      {/*  {result} */}
-      {/*  <p>{prods[1] ? prods[1].name : ""}</p> */}
-      {/*  <input
-        onChange={(e) => {
-          setProds([
-            ...prods,
-            { name: e.target.value, category: "канц", cost: 10 }
-          ]);
-          console.log(prods);
-        }}
-      /> */}
+
       <br />
 
-      <InputOne
-        prods={prods}
-        setProds={setProds}
-        listArr={listArr} /* set={setName} */
-      />
-      {/*  <InputOne set={setCategory} />
-      <InputOne set={setCost} /> */}
+      <InputOne prods={prods} setProds={setProds} listArr={listArr} />
     </div>
   );
 }
@@ -287,8 +260,6 @@ export default function App() {
 //------------InputOne--------------
 
 function InputOne({ prods, setProds, listArr }) {
-  /*  const [value, setValue] = useState(""); */
-
   //наименование
   const [valueOne, setValueOne] = useState("");
   //категория
@@ -298,24 +269,12 @@ function InputOne({ prods, setProds, listArr }) {
   //дата
   const [valueDate, setValueDate] = useState("");
 
-  //const texts = ["text1", "text2", "text3", "text4"];
-
-  /*  const options = prods.map((item, index) => {
-    return (
-      <option key={nanoid()} value={index}>
-        {item.category}
-      </option>
-    );
-  }); */
-
   function addItem() {
     setProds([
       ...prods,
       { date: valueDate, name: valueOne, category: valueTwo, cost: valueThree }
     ]);
   }
-
-  //console.log("listOne", listOne);
 
   // список неповторяющихся категорий
   const listOne = listArr.map((item) => {
@@ -324,15 +283,12 @@ function InputOne({ prods, setProds, listArr }) {
         key={nanoid()}
         onClick={(e) => {
           setValueTwo(e.target.innerHTML);
-          //  console.log(e.target.innerHTML);
         }}
       >
         {item}
       </li>
     );
   });
-
-  //const listOne
 
   return (
     <div className="container">
@@ -342,7 +298,6 @@ function InputOne({ prods, setProds, listArr }) {
         value={valueDate}
         onChange={(e) => {
           setValueDate(e.target.value);
-          //console.log(prods);
         }}
       />
       <input
@@ -350,7 +305,6 @@ function InputOne({ prods, setProds, listArr }) {
         value={valueOne}
         onChange={(e) => {
           setValueOne(e.target.value);
-          //console.log(prods);
         }}
       />
       <span id="parent">
@@ -360,8 +314,6 @@ function InputOne({ prods, setProds, listArr }) {
           value={valueTwo}
           onChange={(e) => {
             setValueTwo(e.target.value);
-
-            //console.log(prods);
           }}
         />
         <ul id="list">{valueTwo !== "" ? listOne : ""}</ul>
@@ -372,33 +324,16 @@ function InputOne({ prods, setProds, listArr }) {
         value={valueThree}
         onChange={(e) => {
           setValueThree(e.target.value);
-          //console.log(prods);
         }}
       />
       <button
         onClick={() => {
-          //console.log(valueDate);
           addItem();
-          //console.log(valueDate);
         }}
       >
         ADD
       </button>
       <br />
-      {/*  <div>
-        <select
-          value={value}
-          onChange={(event) => {
-            setValue(event.target.value);
-            setValueTwo("prods[+value].category");
-            //console.log("p")
-          }}
-        >
-          {options}
-        </select>
-        <p>ваш выбор: {prods[+value].category}</p>
-      </div> */}
-      {/* valueTwo !== "" ? listOne : "*" */}
     </div>
   );
 }
@@ -410,10 +345,8 @@ function InputOne({ prods, setProds, listArr }) {
 //-------------------Table------------------
 
 function Table({ name, category, cost, prods, setProds, listArr }) {
-  
   //удалить запись из таблицы
   function delItem(index) {
-    // console.log(index);
     setProds([
       ...prods.slice(0, index),
       ...prods.slice(index + 1, prods.length)
@@ -421,32 +354,9 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
   }
 
   const [change, setChange] = useState(false);
- // индекс строки
+  // индекс строки
   const [numIndex, setNumIndex] = useState(null);
 
-  /* function changeItem(e) {
-    //console.log((prods[index].name = e.target.value));
-    console.log("numIndex", numIndex);
-    console.log(e.target.value);
-    setProds([
-      ...prods.slice(0, numIndex),
-      {
-        name: e.target.value,
-        category: "item.category",
-        cost: "item.cost"
-      },
-      ...prods.slice(numIndex + 1, prods.length)
-    ]);
-    console.log("prods", prods);
-  } //changeItem */
-
-  /*   function inputChange(e, item) {
-    change === false ? (
-      item.name
-    ) : (
-      <input value={item.name} onChange={changeItem} />
-    );
-  } */
   // id строки
   const [editId, setEditId] = useState(null);
   //первая дата периода
@@ -461,33 +371,30 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
       new Date().getMonth() + 1
     }-${new Date().getDate()}`
   );
-
+  // дата сегодня
   const [dateOne, setDateOne] = useState(new Date());
 
-  // дни
+  // день
   const [optionD, setOptionD] = useState(new Date().getDate());
-  //месяцы
+  //месяц
   const [optionM, setOptionM] = useState(new Date().getMonth() + 1);
-  //недели
+  //неделя
   const [optionW, setOptionW] = useState();
-
+  //массив с календарем на месяц
   const [monthArr, setMonthArr] = useState(
     draw(dateOne.getFullYear(), optionM - 1)
   );
-
+  //выбранная категория
   const [categoryName, setCategoryName] = useState(null);
 
-  //console.log(dateOne);
-
+  // значение инпута в таблице
   function getValue(prop, index, arr = prods) {
-    //console.log(prop, index);
     return arr.reduce(
-      (res, item, index) =>
-        item.id === editId ? item[index] /* item[prop] */ : res,
+      (res, item, index) => (item.id === editId ? item[index] : res),
       arr[index][prop]
     );
   }
-
+  // изменение ячейки таблицы
   function changeItem(prop, event) {
     setProds(
       prods.map((item) =>
@@ -496,32 +403,13 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
     );
   }
 
-  let resultTwo = "*";
-
-  //по дате
-  const resultDate = prods.map((item) => {
-    let itemDate = new Date(item.date);
-    /*  console.log("dateOne1", dateOne);
-    console.log("itemDate", itemDate);
-    console.log(dateOne == itemDate);
-
-    console.log(
-      "111",
-      JSON.stringify(new Date("2022-04-07")) ==
-        JSON.stringify(new Date("2022-04-07"))
-    ); */
-
-    return JSON.stringify(itemDate) == JSON.stringify(dateOne) ? item : "";
-  });
-
+  //меняет первый и последний день периода
   function changeFirstEndDay(e) {
-    let dateChange = `${new Date().getFullYear()}-${
-      /* new Date().getMonth() */ optionM
-    }-${e}`;
+    let dateChange = `${new Date().getFullYear()}-${optionM}-${e}`;
     setDateFirst(dateChange);
     setDateSecond(dateChange);
   }
-
+  // меняет месяц
   function changeMonth(e) {
     let dateChangeStart = `${new Date().getFullYear()}-${e}-${1}`;
 
@@ -531,8 +419,6 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
       return item != " ";
     });
 
-    //console.log("endDay", newMonth[newMonth.length - 1], endDay);
-
     let dateChangeEnd = `${new Date().getFullYear()}-${e}-${
       endDay[endDay.length - 1]
     }`;
@@ -540,29 +426,14 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
     setDateSecond(dateChangeEnd);
   }
 
-  //период
+  //строки отфильтрованные по периоду
   const resultPeriod = prods.filter((item) => {
     let itemDate = new Date(item.date);
     let first = new Date(dateFirst);
     let second = new Date(dateSecond);
 
-    /*  console.log(
-      "ifs",
-      itemDate,
-      first,
-      second,
-      JSON.stringify(itemDate) >= JSON.stringify(first) &&
-        JSON.stringify(itemDate) <= JSON.stringify(second),
-      JSON.stringify(itemDate),
-      JSON.stringify(first),
-      JSON.stringify(second)
-    ); //false  "2022-05-07T19:00:00.000Z" */
-
     /* console.log(
-      "ifs2",
-      itemDate,
-      first,
-      second,
+       
       itemDate.getTime() >= first.getTime(),
       itemDate.getTime() <= second.getTime()
     ); */
@@ -570,19 +441,15 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
     return (
       JSON.stringify(itemDate) >= JSON.stringify(first) &&
       JSON.stringify(itemDate) <= JSON.stringify(second)
-      /* ? item
-      : false */
     );
   });
 
-  //console.log("resultP", resultPeriod);
+  //строки таблицы сортированные по периоду
+  let resultTwo = [];
 
   resultTwo = tableMap(resultPeriod);
 
-  //по категориям
-
-  /* if(categoryName == "по дате"){console.log("categoryName", categoryName);
-  } */
+  // фильтр по категориям
 
   const resultCategory = prods.filter((item) => {
     if (categoryName !== null && categoryName !== "по категориям") {
@@ -592,69 +459,10 @@ function Table({ name, category, cost, prods, setProds, listArr }) {
     }
   });
 
-  //console.log("catOne", resultCategory);
-
+  // строки таблицы сортированные по категориям
   const resultThreeCategory = tableMap(resultCategory);
 
-  //дням, неделям, месяцам
-  /*  
-let [month, setMonth] = useState(dateOne.getMonth());
-  let [year, setYear] = useState(dateOne.getFullYear());
-
-  let [dayOne, setDayOne] = useState(dateOne.getDate() - 1) 
-  */
-
-  const resultMD = prods.map((item) => {
-    let monthA = JSON.stringify(new Date(item.date).getMonth() + 1);
-    //dateOne.getMonth() + 1
-    //let year = dateOne.getFullYear();
-    let dayA = JSON.stringify(new Date(item.date).getDate());
-    //dateOne.getDate()
-
-    let dayB = JSON.stringify(optionD);
-    let monthB = JSON.stringify(optionM);
-
-    //console.log("A", dayA, monthA);
-    //console.log("B", dayB, monthB);
-    //console.log("---");
-    return monthA == monthB && dayA == dayB ? item : "";
-  });
-
-  //console.log("MD", resultMD);
-
-  // по неделям
-
-  //по категориям
-
-  const [startEnd, setStartEnd] = useState([]);
-
-  function changeStartEnd() {
-    // периоды не меняются
-    if (optionW) {
-      const startEndTwo = monthArr[optionW].filter((item) => {
-        //filter
-        return item != " ";
-      });
-
-      //console.log("se", startEndTwo, startEnd);
-
-      setStartEnd(...startEndTwo);
-
-      setDateFirst(
-        `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
-          startEndTwo[0]
-        }`
-      );
-      // value по дате не меняются
-      setDateSecond(
-        `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
-          startEndTwo[startEndTwo.length - 1]
-        }`
-      );
-    }
-
-    //console.log("fe", startEnd, dateFirst, dateSecond);
-  }
+  // устанавливает начало и конец недели в период
 
   function changeWeek(e) {
     let newMonth = draw(new Date().getFullYear(), optionM - 1);
@@ -662,19 +470,15 @@ let [month, setMonth] = useState(dateOne.getMonth());
     if (e >= 0) {
       const startEndTwo = newMonth[e].filter((item) => {
         //filter
-        return item != " ";
+        return item !== " ";
       });
-
-      //console.log("se", startEndTwo, startEnd);
-
-      setStartEnd(...startEndTwo);
 
       setDateFirst(
         `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
           startEndTwo[0]
         }`
       );
-      // value по дате не меняются
+
       setDateSecond(
         `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${
           startEndTwo[startEndTwo.length - 1]
@@ -682,33 +486,16 @@ let [month, setMonth] = useState(dateOne.getMonth());
       );
 
       setOptionW(e);
-
-      //console.log("W", e, dateFirst, dateSecond, startEndTwo);
     }
   }
 
-  const resultWeeks = prods.map((item) => {
-    // если неделя вторая или предпоследняя
-
-    //console.log("111", monthArr[optionW][0], monthArr[optionW][6]);
-
-    //setDateFirst
-
-    // setDateSecond
-
-    return 1 /* item.category == catOne ? item : "" */;
-  });
-
-  //---
+  //---создание строк таблицы из массива
   function tableMap(arr) {
-    //console.log("arr", arr);
-
     return arr.map((item, index, arr) => {
       return (
         <tr
           key={item.id}
           onClick={() => {
-            //console.log(index);
             setEditId(item.id);
             setNumIndex(index);
             setChange(true);
@@ -757,87 +544,23 @@ let [month, setMonth] = useState(dateOne.getMonth());
     });
   }
   //---
-
-  const result = prods.map((item, index) => {
-    return (
-      <tr
-        key={item.id}
-        onClick={() => {
-          //console.log(index);
-          setEditId(item.id);
-          setNumIndex(index);
-          setChange(true);
-        }}
-        onBlur={() => {
-          setEditId(null);
-          setNumIndex(null);
-        }}
-      >
-        <td>
-          <input
-            value={getValue("date", index)}
-            onChange={(event) => changeItem("date", event)}
-          />
-        </td>
-        <td>
-          <input
-            value={getValue("name", index)}
-            onChange={(event) => changeItem("name", event)}
-          />
-          {/* (e, item) => inputChange(e, item) */}
-          {/* item.name */}
-        </td>
-        <td>
-          <input
-            value={getValue("category", index)}
-            onChange={(event) => changeItem("category", event)}
-          />
-          {/* item.category */}
-        </td>
-        <td>
-          <input
-            type="number"
-            value={getValue("cost", index)}
-            onChange={(event) => changeItem("cost", event)}
-          />
-          {/* item.cost */}
-        </td>
-        <td>
-          <button
-            onClick={() => {
-              delItem(index);
-            }}
-          >
-            DEL
-          </button>
-        </td>
-      </tr>
-    );
-  });
-
+  // сумма товаров
   function sum(arr = prods) {
-    //console.log("sum");
-    //console.log("prods[0].cost", prods[0].cost);
     let summa = 0;
     for (let i = 0; i < arr.length; i++) {
       summa = +arr[i].cost + summa;
-      //console.log("prods[i].cost", prods[i].cost);
     }
-    //console.log("summa", summa);
+
     return summa;
   }
 
   let arrDays = [];
   let arrMonths = [];
   let arrWeek = [];
-
+  // заполнение массивов номерами для options
   arrDays = arrNumbersFill(arrDays, 31);
   arrMonths = arrNumbersFill(arrMonths, 12);
   arrWeek = arrNumbersFill(arrWeek, monthArr.length, 0);
-
-  //console.log("arrWeek", arrWeek);
-
-  //console.log("arrMonths", arrMonths);
 
   function arrNumbersFill(arr, num, step = 1) {
     for (let i = 0; i < num; i++) {
@@ -845,12 +568,12 @@ let [month, setMonth] = useState(dateOne.getMonth());
     }
     return arr;
   }
-
+  //options для дней
   const optionsDays = optionsMaps(arrDays);
-
+  //options для месяцев
   const optionsMonths = optionsMaps(arrMonths);
 
-  //console.log("arrWeek", arrWeek);
+  //options для недель
 
   const optionsWeeks = arrWeek.map((item, index) => {
     return (
@@ -860,16 +583,13 @@ let [month, setMonth] = useState(dateOne.getMonth());
     );
   });
 
-  //console.log("optionsMonths", optionsMonths);
+  // для выпадающего списка по категориям/дате
 
   const listArrAddEnd = ["по категории", ...listArr, "по дате"];
 
-  //console.log("l", listArrAddEnd)
+  const listOptions = optionsMaps(listArrAddEnd);
 
-  const listOptions = listArrAddEnd.map((item, index) => {
-    return <option key={nanoid()}>{item}</option>;
-  });
-  //   переделать
+  //создает options из массива
   function optionsMaps(arr) {
     return arr.map((item, index) => {
       return <option key={nanoid()}>{item}</option>;
@@ -878,13 +598,8 @@ let [month, setMonth] = useState(dateOne.getMonth());
   // return TABLE
   return (
     <>
-      {/* <p>
-        numIndex: {numIndex}
-        <br /> editId: {editId}
-      </p> */}
       <table>
         <tr>
-          {/* <td>Дата</td> */}
           <td>Наимен</td>
           <td>Катег</td>
           <td>Цена</td>
@@ -893,8 +608,8 @@ let [month, setMonth] = useState(dateOne.getMonth());
         {categoryName === null ? resultTwo : resultThreeCategory}
         <span>Сумма: </span>{" "}
         {categoryName === null ? sum(resultPeriod) : sum(resultCategory)}
+        <span> руб. </span>
       </table>
-      {/*   <p>День недели {new Date().getDay()}</p> */}
       <span>c: </span>
       {dateFirst}
       <span> по: </span>
@@ -911,7 +626,6 @@ let [month, setMonth] = useState(dateOne.getMonth());
         {optionsDays}
       </select>{" "}
       <span> месяц: </span>
-      {/* optionM */}
       <select
         value={optionM}
         onChange={(e) => {
@@ -925,9 +639,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
       <select
         value={optionW}
         onChange={(e) => {
-          // setOptionW(prev => +e.target.value);
           changeWeek(+e.target.value);
-          //changeStartEnd();
         }}
       >
         {optionsWeeks}
@@ -939,7 +651,6 @@ let [month, setMonth] = useState(dateOne.getMonth());
         value={dateFirst}
         onChange={(e) => {
           setDateFirst(e.target.value);
-          //console.log("dateFirst", dateFirst);
         }}
       />
       <input
@@ -948,12 +659,7 @@ let [month, setMonth] = useState(dateOne.getMonth());
         onChange={(e) => {
           setDateSecond(e.target.value);
         }}
-      />
-      {/* categoryName */}
-      {/* <input
-        value={categoryName}
-        onChange={(e) => setCategoryName(e.target.value)}
-      /> */}{" "}
+      />{" "}
       <br />
       <span> по категории/дате: </span>
       <select
@@ -968,26 +674,6 @@ let [month, setMonth] = useState(dateOne.getMonth());
         {listOptions}
       </select>
       <br />
-      {/*  <table>
-        <tr>
-          <td>Дата</td>
-          <td>Наимен</td>
-          <td>Катег</td>
-          <td>Цена</td>
-          <td> </td>
-        </tr>
-
-        {result}
-        {sum()}
-      </table> */}
-      {/* <div id="parent">
-        <input id="elem" />
-        <ul id="list">
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-        </ul>
-      </div> */}
     </>
   );
 }
