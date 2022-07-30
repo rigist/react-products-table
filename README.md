@@ -31,3 +31,5 @@
 Можно построить график трат, детализированный
 по дням, неделям, месяцам. График также можно
 строить по определенным категориям продуктов.
+
+Демо: [https://codesandbox.io/s/brave-cannon-4hzge9?file=/src/App.js](https://codesandbox.io/s/brave-cannon-4hzge9?file=/src/App.js)
