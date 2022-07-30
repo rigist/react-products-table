@@ -33,3 +33,7 @@
 строить по определенным категориям продуктов.
 
 Демо: [https://codesandbox.io/s/brave-cannon-4hzge9?file=/src/App.js](https://codesandbox.io/s/brave-cannon-4hzge9?file=/src/App.js)
+
+## Инструкция по запуску приложения
+* Установка - `npm i`
+* Запуск приложения - `npm start`
